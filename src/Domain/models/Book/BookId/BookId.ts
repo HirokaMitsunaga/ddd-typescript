@@ -1,28 +1,27 @@
-import { isEqual } from "lodash";
+import { ValueObject } from 'Domain/models/shared/ValueObject';
 
-export class BookId {
-  private readonly _value: string;
-
+type BookIdValue = string;
+export class BookId extends ValueObject<BookIdValue, 'BookId'> {
   static MAX_LENGTH = 13;
   static MIN_LENGTH = 10;
 
-  constructor(value: string) {
-    this.validate(value);
-    this._value = value;
+  constructor(value: BookIdValue) {
+    super(value);
   }
 
-  private validate(isbn: string): void {
+  protected validate(isbn: BookIdValue): void {
     if (isbn.length < BookId.MIN_LENGTH || isbn.length > BookId.MAX_LENGTH) {
-      throw new Error("ISBNの文字数が不正です");
+      throw new Error('ISBNの文字数が不正です');
     }
 
     if (!this.isValidIsbn10(isbn) && !this.isValidIsbn13(isbn)) {
-      throw new Error("不正なISBNの形式です");
+      throw new Error('不正なISBNの形式です');
     }
   }
 
   private isValidIsbn10(isbn10: string): boolean {
     // ISBN-10 のバリデーションロジックを実装
+    // 仮に、10桁目がチェックディジットとして正しいと仮定します。
     // 実際の実装ではここにチェックディジットを計算するロジックが必要です。
     return isbn10.length === 10; // ここを実際のチェックディジット計算に置き換える
   }
@@ -30,15 +29,7 @@ export class BookId {
   private isValidIsbn13(isbn13: string): boolean {
     // ISBN-13 のバリデーションロジックを実装
     // ここでは簡単な例を示しますが、実際にはより複雑なチェックが必要です
-    return isbn13.startsWith("978") && isbn13.length === 13;
-  }
-
-  equals(other: BookId): boolean {
-    return isEqual(this._value, other._value);
-  }
-
-  get value(): string {
-    return this._value;
+    return isbn13.startsWith('978') && isbn13.length === 13;
   }
 
   toISBN(): string {
