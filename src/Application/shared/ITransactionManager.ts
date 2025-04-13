@@ -1,3 +1,3 @@
 export interface ITransactionManager {
-  bigin<T>(callback: () => Promise<T>): Promise<T | undefined>;
+  begin<T>(callback: () => Promise<T>): Promise<T | undefined>;
 }
